@@ -9,14 +9,20 @@
 
   <body>
     <div id="start-screen" class="screen">
+      <h1>G E T   O U T</h1>
+      <p>Game Instruction</p>
       <button>Play Game</button>
     </div>
 
-    <div id="game-screen" class="screen" style="display: none">
-      <canvas width="800" height="600"></canvas>
-      <button style="position: absolute; top: 650px; left: 520px">
-        Restart
-      </button>
+    <div id="container">
+      <div id="game-screen" class="screen" style="display: none">
+        <canvas width="800" height="600"></canvas>
+      </div>
+
+      <div id="you-win-screen" class="screen" style="display: none">
+        <h2>You Win</h2>
+        <button>Restart</button>
+      </div>
     </div>
 
     <div id="game-over-screen" class="screen" style="display: none">

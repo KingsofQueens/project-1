@@ -1,204 +1,241 @@
 class Game {
-  constructor(gameScreenElement, gameOverScreenElement, restartButton) {
-      this.gameScreenElement = gameScreenElement;
-      this.gameOverScreenElement = gameOverScreenElement;
-      this.restartButton = restartButton;
+  constructor(gameScreenElement, gameOverScreenElement, youWinScreenElement) {
+    this.gameScreenElement = gameScreenElement;
+    this.gameOverScreenElement = gameOverScreenElement;
+    this.youWinScreenElement = youWinScreenElement;
 
-      this.canvasElement = document.querySelector('canvas');
-      this.isRunning = false;
-      this.context = this.canvasElement.getContext('2d');
-      this.gameMap = [
-        ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
-        ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', 'W', 'W', 'W', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', 'P', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-        ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-      ];
-      this.boundaries = [];
-      this.portals = [];
-      this.keysPressed = [];
-      this.enableControls();
-      this.currentTimestamp = new Date()
-      this.previousTimestamp = new Date()
+    this.canvasElement = document.querySelector("canvas");
+    this.isRunning = false;
+    this.context = this.canvasElement.getContext("2d");
+    this.gameMap = [
+      ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
+      ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
+      ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', 'W', 'W', 'W', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', 'P', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'Z', 'Z', 'Z', 'Z', 'Z', ' ', 'W'],
+      ['W', ' ', ' ', ' ', 'W', 'W', 'W', ' ', ' ', ' ', ' ', 'W', 'W', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', 'W', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
+      ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
+    ];
+    this.boundaries = [];
+    this.suddenWalls = [];
+    this.portals = [];
+    this.keysPressed = [];
+    this.enableControls();
+    this.currentTimestamp = new Date();
+    this.previousTimestamp = new Date();
+  }
+
+  checkTimestampsDifference() {
+    this.currentTimestamp = new Date();
+    // check difference between current and previous timestamps
+    let timeDelta =
+      30 - Math.floor((this.currentTimestamp - this.previousTimestamp) / 1000);
+    if (timeDelta === 0) {
+      // difference of time passed between each refresh
+      // something happens
+      this.lose();
     }
+    if (timeDelta > 0) {
+      this.context.font = "32px monospace";
+      this.context.fillStyle = "red";
+      this.context.fillText("Time:", 500, 45);
+      this.context.fillText(timeDelta, 600, 45);
+    }
+  }
 
-    
-    checkTimestampsDifference() {
-      this.currentTimestamp = new Date();
-      // check difference between current and previous timestamps
-      if (this.currentTimestamp - this.previousTimestamp === 30000) { // difference of time passed between each refresh
-        // something happens
-        this.lose();
+  start() {
+    console.log(this.currentTimestamp);
+    this.generateWall();
+    this.generateSuddenWall();
+    this.generatePortal();
+    this.player = new Player(this);
+    this.reapers = [];
+    this.addReaper();
+    this.lives = 100;
+    this.frame = 0;
+    this.isRunning = true;
+    this.loop();
+    this.previousTimestamp = new Date();
+  }
+
+  drawLives() {
+    const heartImage = new Image();
+    heartImage.src = "/Materials/Player/heart2.png";
+    this.context.drawImage(
+      heartImage,
+      16 * (Math.floor(this.frame / 9) % 5),
+      0,
+      16,
+      16,
+      45,
+      23,
+      32,
+      32
+    );
+    this.context.font = "32px monospace";
+    this.context.fillStyle = "red";
+    this.context.fillText("HP:", 100, 45);
+    this.context.fillText(this.lives, 180, 45);
+  }
+
+  lose() {
+    this.gameScreenElement.style.display = "none";
+    this.gameOverScreenElement.style.display = "";
+    clearInterval(this.intervalId);
+  }
+
+  runLogic() {
+    this.player.runLogic();
+    for (const reaper of this.reapers) {
+      reaper.runLogic();
+    }
+    if (this.lives <= 0) {
+      this.lose();
+    }
+    this.player.winLogic();
+  }
+
+  enableControls() {
+    const keysToPreventDefaultAction = [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowRight",
+      "ArrowLeft",
+    ];
+    window.addEventListener("keydown", (event) => {
+      if (keysToPreventDefaultAction.includes(event.code)) {
+        event.preventDefault();
       }
-      let timeDelta = 30 - Math.floor((this.currentTimestamp - this.previousTimestamp)/1000);
-      if (timeDelta > 0){
-        this.context.font = '32px sans-serif';
-        this.context.fillStyle = 'red';
-        this.context.fillText("Time:", 500, 45);
-        this.context.fillText(timeDelta, 600, 45);
-      }
-    }
+      this.keysPressed.push(event.code);
+    });
+    window.addEventListener("keyup", (event) => {
+      this.keysPressed = this.keysPressed.filter((code) => code !== event.code);
+    });
+  }
 
-    start() {
-      console.log(this.currentTimestamp);
-      this.generateWall();
-      this.generatePortal();
-      this.player = new Player(this);
-      this.reapers = [];
-      this.addReaper();
-      this.lives = 100;
-      this.frame = 0;
-      this.isRunning = true;
-      this.loop()
-      this.previousTimestamp = new Date()
-    }
+  addReaper() {
+    this.reapers.push(new Reaper(this, 400, 400));
+    setTimeout(() => {
+      this.reapers.push(new Reaper(this, 100, 200));
+    }, 2000);
+    setTimeout(() => {
+      this.reapers.push(new Reaper(this, 550, 100));
+    }, 3000);
+  }
 
-    
-    drawLives() {
-      this.context.font = '32px sans-serif';
-      this.context.fillStyle = 'red';
-      this.context.fillText("HP:", 45, 45);
-      this.context.fillText(this.lives, 120, 45);
-    }
+  draw() {
+    this.frame++;
 
-    lose() {
-      this.gameScreenElement.style.display = 'none';
-      this.gameOverScreenElement.style.display = '';
-      clearInterval(this.intervalId);
-    }
-    
-    runLogic() {
+    this.context.clearRect(0, 0, 800, 600);
 
-      this.player.runLogic();
-      for (const reaper of this.reapers) {
-        reaper.runLogic();
-      }
-      if (this.lives <= 0) {
-        this.lose();
-      }
-      this.player.winLogic();
+    this.drawWall();
+    this.drawPortal();
+    this.setSuddenWallInterval();
+    for (const reaper of this.reapers) {
+      reaper.draw();
     }
-  
-    enableControls () {
-        const keysToPreventDefaultAction = ['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'];
-        window.addEventListener('keydown', (event) => {
-          if (keysToPreventDefaultAction.includes(event.code)) {
-            event.preventDefault();
-          }
-          this.keysPressed.push(event.code);
-        });
-        window.addEventListener('keyup', (event) => {
-          this.keysPressed = this.keysPressed.filter(code => code !== event.code);
-        });
-    }
+    this.player.draw();
+  }
 
-    addReaper() {
-        this.reapers.push(
-            new Reaper(this, 500, 400),
-          );
-    }
-
-    draw() {
-      this.frame++;
-      
-      this.context.clearRect(0, 0, 800, 600);
-
-      this.drawWall();
-      this.drawPortal();
-      for (const reaper of this.reapers) {
-            reaper.draw();
-          }
-      this.player.draw();
-    }
-
-    generatePortal() {
-      this.gameMap.forEach((row, i) => {
-        row.forEach((block, j) => {
-          switch (block) {
-            case 'P':
-              this.portals.push(
-                new Portal(this, 30 * j, 30 * i)
-              )
-              break;
-          }
-        })
-      })
-    }
-
-    drawPortal() {
-      this.portals.forEach((portal) => {
-        portal.draw();
-      })
-    }
-
-    generateWall() {
-      this.gameMap.forEach((row, i) => {
-        row.forEach((block, j) => {
-          switch (block) {
-            case 'W':
-              this.boundaries.push(
-                new Boundary(this, 32 * j, 32 * i)
-              )
-              break;
-          }
-        })
-      })
-    }
-
-    /*
-  randomBlock(){
+  generatePortal() {
     this.gameMap.forEach((row, i) => {
       row.forEach((block, j) => {
-        let randomX = Math.floor(Math.random()*i);
-        let randomY = Math.floor(Math.random()*j);
         switch (block) {
-          case ' ':
-            if (this.boundaries.length < i * j / 8) {
-              this.boundaries.push(new Boundary(this, randomX , randomY))
-              this.boundaries.push(new Boundary(this, randomX , randomY+1))  
-            }
-          break;
+          case "P":
+            this.portals.push(new Portal(this, 30 * j, 30 * i));
+            break;
         }
-        console.log(emptyBlock);
-      })
-    })
+      });
+    });
+  }
+
+  drawPortal() {
+    this.portals.forEach((portal) => {
+      portal.draw();
+    });
+  }
+
+  generateWall() {
+    this.gameMap.forEach((row, i) => {
+      row.forEach((block, j) => {
+        switch (block) {
+          case "W":
+            this.boundaries.push(new Boundary(this, 32 * j, 32 * i));
+            break;
+        }
+      });
+    });
+  }
+
+  drawWall() {
+    this.boundaries.forEach((boundary) => {
+      boundary.draw();
+    });
+  }
+
+  generateSuddenWall() {
+    this.gameMap.forEach((row, i) => {
+      row.forEach((block, j) => {
+        switch (block) {
+          case "Z":
+            this.suddenWallAppearInterval = setInterval(() => {
+            this.boundaries.push(new Boundary(this, 32 * j, 32 * i));
+          }, 5000);
+            break;
+        }
+      });
+    });
+  }
+
+  /*
+  drawWSuddenWall() {
+    this.suddenWalls.forEach((suddenWall) => { 
+      suddenWall.draw();
+    });
   }
 */
 
-    drawWall() {
+  setSuddenWallInterval() {
+ //   this.suddenWallAppearInterval = setInterval(() => {
       this.boundaries.forEach((boundary) => {
         boundary.draw();
-      })
-
+      });
+ //   }, 5000);
+    /*
+    for (let t = 0; t < 30; t++) {
+      this.suddenWallAppearInterval = setInterval(() => {
+        this.boundary.visible = true;
+        this.suddenWalls.forEach((suddenWall) => {
+      suddenWall.draw();
+    });
+      }, 1000 * (2 * t + 1));
+      this.suddenWallDisappearInterval = setInterval(() => {
+        this.boundary.visible = false;
+      }, 1000 * 2 * t);
     }
-  
-    loop() {
-      if (this.isRunning) {
-          this.intervalId = setInterval(() => {
-          this.draw()
-          this.drawLives();
-          this.runLogic()
-          this.checkTimestampsDifference()
-        }, 1000 / 60);
-        /*
-        this.randomBlockInterval = setInterval(() => {
-          this.randomBlock()
-        }, 1000);
-        */
-      }
+    */
+  }
+
+  loop() {
+    if (this.isRunning) {
+      this.intervalId = setInterval(() => {
+        this.draw();
+        this.drawLives();
+        this.runLogic();
+        this.checkTimestampsDifference();
+      }, 1000 / 60);
+    }
   }
 }

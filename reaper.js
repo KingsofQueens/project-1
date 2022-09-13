@@ -4,6 +4,12 @@ reaperImage.src = "/Materials/Reaper/Enemy 15-1.png"; // 1024 × 1920 // 9 x
 const spriteWidth = 32;
 const spriteHeight = 32;
 
+const bloodImage = new Image();
+bloodImage.src = "/Materials/Reaper/4_100x100px.png"; // 1024 × 1920 // 9 x 20
+
+const bloodSpriteWidth = 100;
+const bloodSpriteHeight = 100;
+
 const ATTRACTION_DISTANCE = 300;
 const ATTACK_DISTANCE = 5;
 
@@ -72,8 +78,8 @@ class Reaper {
     let xDelta = this.x - playerX;
     let yDelta = this.y - playerY;
     if (xDelta < ATTRACTION_DISTANCE && yDelta < ATTRACTION_DISTANCE) {
-      this.accelerationX = (-4 * xDelta) / 1000;
-      this.accelerationY = (-4 * yDelta) / 1000;
+      this.accelerationX = (Math.random() * -10 * xDelta) / 1000;
+      this.accelerationY = (Math.random() * -20 * yDelta) / 1000;
     }
     if (
       Math.abs(xDelta) < this.width + ATTACK_DISTANCE &&
@@ -84,24 +90,6 @@ class Reaper {
     }
     this.runMovementLogic(this.game.boundaries);
   }
-
-  /*
-  pause() {
-    const { x: playerX, y: playerY } = this.game.player;
-    let xDelta = this.x - playerX;
-    let yDelta = this.y - playerY;
-    if (xDelta = 0) {
-      this.accelerationX = 0;
-      this.accelerationY = 0;
-    }
-    if (yDelta = 0) {
-      this.accelerationX = 0;
-      this.accelerationY = 0;
-    }
-    this.runMovementLogic(this.game.player);
-    setTimeout(this.attack(), 12000);
-  }
-  */
 
   attack() {
     const { x: playerX, y: playerY } = this.game.player;
@@ -118,12 +106,6 @@ class Reaper {
       this.game.player.newAccelerationY = 1;
     }
     this.game.lives--;
-    /*
-    setInterval(console.log("hi"), 60000);
-    if ((this.game.lives = 0)) {
-      clearInterval(myInterval);
-    }
-    */
   }
 
   draw() {

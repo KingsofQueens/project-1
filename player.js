@@ -17,6 +17,7 @@ class Player {
     this.accelerationY = 0;
     this.friction = 0.15;
     this.direction = "right";
+    this.isMoving = false;
   }
 
   checkIntersection(item) {
@@ -67,23 +68,28 @@ class Player {
 
   runLogic() {
     const keys = this.game.keysPressed;
+    this.isMoving = false;
     for (const key of keys) {
       switch (key) {
         case "ArrowRight":
           this.accelerationX = +1.5;
           this.direction = "right";
+          this.isMoving = true;
           break;
         case "ArrowDown":
           this.accelerationY = +1.5;
           this.direction = "down";
+          this.isMoving = true;
           break;
         case "ArrowLeft":
           this.accelerationX = -1.5;
           this.direction = "left";
+          this.isMoving = true;
           break;
         case "ArrowUp":
           this.accelerationY = -1.5;
           this.direction = "up";
+          this.isMoving = true;
           break;
       }
     }
@@ -96,17 +102,15 @@ class Player {
 
       if (isIntersectingWithPortal) {
         clearInterval(this.game.intervalId);
-        this.game.context.font = "80px sans-serif";
-        this.game.context.fillStyle = "yellow";
-        this.game.context.fillText("You Win", 392, 250);
-        this.game.restartButton.style.display = "";
+        this.game.gameScreenElement.style.display = "inline";
+        this.game.youWinScreenElement.style.display = "";
+        clearInterval(this.game.intervalId);
       }
     }
   }
 
   draw() {
-    /*
-    if (this.game.keysPressed) {
+    if (!this.isMoving) {
       this.game.context.drawImage(
         playerImage,
         playerSpriteWidth * 1,
@@ -119,8 +123,7 @@ class Player {
         this.height
       );
     }
-    */
-    if (this.direction === "right") {
+    if (this.direction === "right" && this.isMoving) {
       this.game.context.drawImage(
         playerImage,
         playerSpriteWidth * (Math.floor(this.game.frame / 6) % 3),
@@ -132,7 +135,7 @@ class Player {
         this.width,
         this.height
       );
-    } else if (this.direction === "down") {
+    } else if (this.direction === "down" && this.isMoving) {
       this.game.context.drawImage(
         playerImage,
         playerSpriteWidth * (Math.floor(this.game.frame / 6) % 3),
@@ -144,7 +147,7 @@ class Player {
         this.width,
         this.height
       );
-    } else if (this.direction === "left") {
+    } else if (this.direction === "left" && this.isMoving) {
       this.game.context.drawImage(
         playerImage,
         playerSpriteWidth * (Math.floor(this.game.frame / 6) % 3),
@@ -156,7 +159,7 @@ class Player {
         this.width,
         this.height
       );
-    } else if (this.direction === "up") {
+    } else if (this.direction === "up" && this.isMoving) {
       this.game.context.drawImage(
         playerImage,
         playerSpriteWidth * (Math.floor(this.game.frame / 6) % 3),
@@ -170,40 +173,4 @@ class Player {
       );
     }
   }
-
-  /*
-    const keys = this.game.keysPressed;
-    window.onkeydown = function(evt) {
-         keys[evt.keyCode] = true;
-    }
-    window.onkeyup = function(evt) {
-        delete keys[evt.keyCode];
-
-    this.game.context.drawImage(
-      if (this.player.moving.right) {
-        playerImageRight,
-        playerSpriteWidth * (Math.floor(this.game.frame / 4) % 4),
-        0,
-        playerSpriteWidth,
-        playerSpriteHeight,
-        this.x,
-        this.y,
-        this.width,
-        this.height
-      }
-      if (this.player.moving.left) {
-        playerImageLeft,
-        playerSpriteWidth * (Math.floor(this.game.frame / 4) % 4),
-        0,
-        playerSpriteWidth,
-        playerSpriteHeight,
-        this.x,
-        this.y,
-        this.width,
-        this.height
-      }
-    );
-    
-  }
-  */
 }

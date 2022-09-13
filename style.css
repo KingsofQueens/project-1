@@ -18,13 +18,6 @@ canvas {
   background: linear-gradient(0deg, rgb(0, 0, 0) 0%, rgb(109, 3, 24) 100%);
 }
 
-#restart-button {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .screen {
   width: 800px;
   height: 600px;
@@ -32,6 +25,36 @@ canvas {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #278629;
   box-shadow: 10px 10px 20px black;
+  font-family: monospace;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#you-win-screen h2 {
+  color: yellow;
+}
+
+#start-screen,
+#game-over-screen {
+  background-color: #503e3e;
+  background-image: url("./Materials/background4b.png");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  font-family: monospace;
+}
+
+#start-screen h1 {
+  font-size: 60px;
+  color: rgb(200, 21, 21);
+}
+
+#start-screen p {
+  font-size: 24px;
+  color: white;
 }
