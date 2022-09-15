@@ -96,19 +96,6 @@ class Player {
     this.runMovementLogic(this.game.boundaries);
   }
 
-  winLogic() {
-    for (let portal of this.game.portals) {
-      const isIntersectingWithPortal = this.checkIntersection(portal);
-
-      if (isIntersectingWithPortal) {
-        clearInterval(this.game.intervalId);
-        this.game.gameScreenElement.style.display = "inline";
-        this.game.youWinScreenElement.style.display = "";
-        clearInterval(this.game.intervalId);
-      }
-    }
-  }
-
   draw() {
     if (!this.isMoving) {
       this.game.context.drawImage(

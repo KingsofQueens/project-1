@@ -106,6 +106,7 @@ class Reaper {
       this.game.player.newAccelerationY = 1;
     }
     this.game.lives--;
+    //this.game.isRunning = false;
   }
 
   draw() {

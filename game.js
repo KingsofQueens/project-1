@@ -1,36 +1,23 @@
 class Game {
-  constructor(gameScreenElement, gameOverScreenElement, youWinScreenElement) {
+  constructor(
+    gameScreenElement,
+    gameOverScreenElement,
+    youWinScreenElement,
+    mapsArray,
+  ) {
     this.gameScreenElement = gameScreenElement;
     this.gameOverScreenElement = gameOverScreenElement;
     this.youWinScreenElement = youWinScreenElement;
+    this.maps = mapsArray;
 
     this.canvasElement = document.querySelector("canvas");
     this.isRunning = false;
     this.context = this.canvasElement.getContext("2d");
-    this.gameMap = [
-      ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
-      ['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C'],
-      ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', 'W', 'W', 'W', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', 'P', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'Z', 'Z', 'Z', 'Z', 'Z', ' ', 'W'],
-      ['W', ' ', ' ', ' ', 'W', 'W', 'W', ' ', ' ', ' ', ' ', 'W', 'W', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', 'W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W', 'W', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', 'W'],
-      ['W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'W'],
-    ];
+    this.gameMap = mapsArray[0];
     this.boundaries = [];
     this.suddenWalls = [];
     this.portals = [];
+
     this.keysPressed = [];
     this.enableControls();
     this.currentTimestamp = new Date();
@@ -70,6 +57,22 @@ class Game {
     this.previousTimestamp = new Date();
   }
 
+  restart() {
+    console.log("Game has restarted.");
+    this.generateWall();
+    this.generateSuddenWall();
+    this.generatePortal();
+    this.reapers = [];
+    this.addReaper();
+    this.lives = 100;
+    this.frame = 0;
+    this.isRunning = true;
+    this.player.x = 32;
+    this.player.y = 96;
+    this.loop();
+    this.previousTimestamp = new Date();
+  }
+
   drawLives() {
     const heartImage = new Image();
     heartImage.src = "/Materials/Player/heart2.png";
@@ -104,7 +107,7 @@ class Game {
     if (this.lives <= 0) {
       this.lose();
     }
-    this.player.winLogic();
+    this.winLogic();
   }
 
   enableControls() {
@@ -133,6 +136,11 @@ class Game {
     setTimeout(() => {
       this.reapers.push(new Reaper(this, 550, 100));
     }, 3000);
+    if ((this.gameMap = this.maps[1])) {
+      setTimeout(() => {
+        this.reapers.push(new Reaper(this, 150, 520));
+      }, 4000);
+    }
   }
 
   draw() {
@@ -150,6 +158,7 @@ class Game {
   }
 
   generatePortal() {
+
     this.gameMap.forEach((row, i) => {
       row.forEach((block, j) => {
         switch (block) {
@@ -180,23 +189,28 @@ class Game {
   }
 
   drawWall() {
+    this.context.save();
     this.boundaries.forEach((boundary) => {
       boundary.draw();
     });
+    this.context.restore();
   }
 
   generateSuddenWall() {
+    this.context.save();
     this.gameMap.forEach((row, i) => {
       row.forEach((block, j) => {
         switch (block) {
           case "Z":
+            this.boundaries.visible = false;
             this.suddenWallAppearInterval = setInterval(() => {
-            this.boundaries.push(new Boundary(this, 32 * j, 32 * i));
-          }, 5000);
+              this.boundaries.push(new Boundary(this, 32 * j, 32 * i));
+            }, 4000);
             break;
         }
       });
     });
+    this.context.restore();
   }
 
   /*
@@ -208,11 +222,14 @@ class Game {
 */
 
   setSuddenWallInterval() {
- //   this.suddenWallAppearInterval = setInterval(() => {
-      this.boundaries.forEach((boundary) => {
-        boundary.draw();
-      });
- //   }, 5000);
+    this.context.save();
+    //   this.suddenWallAppearInterval = setInterval(() => {
+    this.boundaries.forEach((boundary) => {
+      this.boundaries.visible = true;
+      boundary.draw();
+    });
+    this.context.restore();
+    //   }, 5000);
     /*
     for (let t = 0; t < 30; t++) {
       this.suddenWallAppearInterval = setInterval(() => {
@@ -228,14 +245,28 @@ class Game {
     */
   }
 
+  winLogic() {
+
+        for (let portal of this.portals) {
+          const isIntersectingWithPortal = this.player.checkIntersection(portal);
+        if (isIntersectingWithPortal) {
+          this.gameScreenElement.style.display = "none";
+          this.youWinScreenElement.style.display = "";
+          this.isRunning = false;
+          this.gameMap = this.maps[1];
+          clearInterval(this.intervalId);
+        }} 
+  }
+  
+
   loop() {
-    if (this.isRunning) {
-      this.intervalId = setInterval(() => {
+    this.intervalId = setInterval(() => {
+      if (this.isRunning) {
         this.draw();
         this.drawLives();
         this.runLogic();
         this.checkTimestampsDifference();
-      }, 1000 / 60);
-    }
+      }
+    }, 1000 / 60);
   }
 }

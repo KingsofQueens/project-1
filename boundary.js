@@ -24,9 +24,8 @@ class Boundary {
     }
   }
   draw() {
+    this.game.context.save();
     if (this.visible) {
-      this.game.context.save();
-
       this.game.context.drawImage(
         wallImage,
         0,
@@ -38,8 +37,7 @@ class Boundary {
         this.width,
         this.height
       );
-
-      this.game.context.restore();
     }
+    this.game.context.restore();
   }
 }

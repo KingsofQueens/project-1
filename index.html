@@ -8,26 +8,31 @@
   </head>
 
   <body>
-    <div id="start-screen" class="screen">
-      <h1>G E T   O U T</h1>
-      <p>Game Instruction</p>
-      <button>Play Game</button>
-    </div>
-
     <div id="container">
-      <div id="game-screen" class="screen" style="display: none">
-        <canvas width="800" height="600"></canvas>
+
+      <div id="start-screen" class="screen">
+        <h1>GET OUT</h1>
+        <h3>Game Instruction</h3>
+        <p>
+          Watchout for the reaper and run away from them </br>
+          by using ↑ ↓ → ← on your keyboard to get to the escape portal </p>
+        <button>Play Game</button>
       </div>
 
-      <div id="you-win-screen" class="screen" style="display: none">
-        <h2>You Win</h2>
-        <button>Restart</button>
-      </div>
-    </div>
+        <div id="game-screen" class="screen" style="display: none">
+          <canvas width="800" height="600"></canvas>
+        </div>
 
-    <div id="game-over-screen" class="screen" style="display: none">
-      <h2>Game Over</h2>
-      <button>Try Again</button>
+        <div id="you-win-screen" class="screen" style="display: none">
+          <h2>You Escaped</h2>
+          <button>Are you sure?</button>
+        </div>
+
+      <div id="game-over-screen" class="screen" style="display: none">
+        <h2>Game Over</h2>
+        <button>Try Again</button>
+      </div>
+
     </div>
 
     <script src="player.js"></script>
